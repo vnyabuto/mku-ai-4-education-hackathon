@@ -1,0 +1,186 @@
+{% extends 'users/home.html' %}
+{% block content %}
+<div class="container mt-5">
+    <!-- Welcome Section -->
+    <div class="welcome-container text-center">
+        <h1 class="display-4" id="welcome-heading">Welcome, {{ request.user.username }}!</h1>
+        <p class="lead text-light">Explore your recommended career paths in the view recommendations section below.<br> <b>Let's get started!</b></p>
+    </div>
+
+    <!-- Social Media Contact Section -->
+    <div class="text-left mt-4">
+        <h3 class="h4 text-info">Contact Us</h3>
+        <p>Follow us on social media:</p>
+        <a href="https://facebook.com" target="_blank" class="btn btn-outline-primary">
+            <i class="fab fa-facebook-f"></i> Facebook
+        </a>
+        <a href="https://twitter.com" target="_blank" class="btn btn-outline-info">
+            <i class="fab fa-twitter"></i> Twitter
+        </a>
+        <a href="https://instagram.com" target="_blank" class="btn btn-outline-danger">
+            <i class="fab fa-instagram"></i> Instagram
+        </a>
+        <a href="https://linkedin.com" target="_blank" class="btn btn-outline-success">
+            <i class="fab fa-linkedin-in"></i> LinkedIn
+        </a>
+    </div>
+
+    <!-- Navigation to Recommendations -->
+    <nav class="mt-4 text-center">
+        <a href="{% url 'recommendations' %}" class="btn btn-primary btn-lg">View Recommendations</a>
+    </nav>
+
+    <!-- Recommended Career Paths -->
+    <div class="row justify-content-center mt-4">
+        <div class="col-lg-8 col-md-10">
+            <h2 class="h4 mb-3 text-info">While you explore the recommendations, check out these suggested Career Paths. </h2>
+
+            <ul class="list-group">
+                {% for career in recommendations %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="mb-1">{{ career.name }}</h5>
+                            <p class="text-muted mb-0">{{ career.description }}</p>
+                        </div>
+                        <span class="badge bg-success rounded-pill">Suggested</span>
+                    </li>
+                {% empty %}
+                    <li class="list-group-item text-center">
+                        <p class="text-muted">No recommendations available. Try updating your skills.</p>
+                    </li>
+                {% endfor %}
+            </ul>   
+        </div>
+    </div>
+
+    <!-- Chatbot Icon -->
+    <div id="chatbot-icon" class="chatbot-icon" onclick="toggleChat()">
+        💬
+    </div>
+
+    <!-- Chatbot Popup -->
+    <div id="chat-container" class="chat-container" style="display: none;">
+        <div class="chat-header">
+            <h5 class="mb-0">Chat with Our AI Assistant</h5>
+            <button id="close-chat" class="btn-close" aria-label="Close" onclick="toggleChat()"></button>
+        </div>
+        <div class="chat-body">
+            <div id="messages" style="height: 200px; overflow-y: auto; padding: 10px;"></div>
+            <div class="input-group mt-2">
+                <input type="text" id="user-input" class="form-control" placeholder="Type your message here..." aria-label="User input">
+                <button id="send-button" class="btn btn-primary">Send</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+<script>
+    // Chatbot Integration with Rasa
+    $(document).ready(function() {
+        $('#send-button').click(function() {
+            const userInput = $('#user-input').val();
+            if (userInput) {
+                $('#messages').append('<div><strong>You:</strong> ' + userInput + '</div>');
+                $('#user-input').val('');
+
+                $.ajax({
+                    url: 'http://localhost:5005/webhooks/rest/webhook',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ "sender": "user", "message": userInput }),
+                    success: function(response) {
+                        if (response.length > 0) {
+                            const botResponse = response[0]?.text || 'Sorry, I didn\'t understand.';
+                            $('#messages').append('<div><strong>Career Coach:</strong> ' + botResponse + '</div>');
+                        } else {
+                            $('#messages').append('<div><strong>Career Coach:</strong> No response from the bot.</div>');
+                        }
+                        $('#messages').scrollTop($('#messages')[0].scrollHeight);
+                    },
+                    error: function() {
+                        $('#messages').append('<div><strong>Career Coach:</strong> Response not available at the moment :(</div>');
+                    }
+                });
+            }
+        });
+
+        $('#user-input').keypress(function(e) {
+            if (e.which === 13) {
+                $('#send-button').click();
+                return false;
+            }
+        });
+    });
+
+    function toggleChat() {
+        $('#chat-container').toggle();
+    }
+</script>
+
+<!-- CSS -->
+<style>
+    .welcome-container {
+        background-color: #add8e6; /* Pale Blue */
+        color: white; /* Ensure the text is readable */
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        position: relative; /* Allows positioning of child elements */
+        z-index: 1; /* Ensure it stays on top of other content */
+    }
+    
+    .chatbot-icon {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 60px;
+        height: 60px;
+        background-color: #17a2b8;
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        cursor: pointer;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+    }
+
+    .chat-container {
+        position: fixed;
+        bottom: 80px;
+        right: 20px;
+        width: 300px;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        display: flex;
+        flex-direction: column;
+        z-index: 1000;
+    }
+
+    .chat-header {
+        background-color: #007bff;
+        color: white;
+        padding: 10px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .chat-body {
+        padding: 10px;
+        flex: 1;
+    }
+
+    .input-group {
+        margin-top: 10px;
+    }
+</style>
+{% endblock %}

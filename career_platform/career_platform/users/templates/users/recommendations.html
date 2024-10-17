@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Career Path Assessment</title>
+</head>
+<body>
+
+<div class="container-fluid mt-5 mb-5">
+    <h2 class="text-center mb-4">Career Path Assessment</h2>
+    <form method="POST" action="{% url 'recommendations' %}">
+        {% csrf_token %}
+
+        <div class="mb-4">
+            <label for="student_id" class="form-label">Student ID</label>
+            <input type="text" id="student_id" name="student_id" class="form-control" placeholder="e.g., 1" required>
+            <small class="form-text text-muted">Enter your Student ID.</small>
+        </div>
+
+        <div class="mb-4">
+            <label for="full_name" class="form-label">Full Name</label>
+            <input type="text" id="full_name" name="full_name" class="form-control" placeholder="e.g., John Mwangi" required>
+            <small class="form-text text-muted">Enter your full name.</small>
+        </div>
+
+        <div class="mb-4">
+            <label for="gender" class="form-label">Gender</label>
+            <select id="gender" name="gender" class="form-control" required>
+                <option value="">Select your gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+
+        <div class="mb-4">
+            <label for="age" class="form-label">Age</label>
+            <input type="number" id="age" name="age" class="form-control" placeholder="e.g., 18" required min="1">
+            <small class="form-text text-muted">Enter your age.</small>
+        </div>
+
+        <div class="mb-4">
+            <label for="primary_school" class="form-label">Primary School Name</label>
+            <input type="text" id="primary_school" name="primary_school" class="form-control" placeholder="e.g., Njiiri Primary" required>
+            <small class="form-text text-muted">Enter your primary school name.</small>
+        </div>
+
+        <div class="mb-4">
+            <label for="kcpe_score" class="form-label">KCPE Score</label>
+            <input type="number" id="kcpe_score" name="kcpe_score" class="form-control" placeholder="e.g., 365" required min="0">
+            <small class="form-text text-muted">Enter your KCPE score.</small>
+        </div>
+
+        <div class="mb-4">
+            <label for="high_school" class="form-label">High School Name</label>
+            <input type="text" id="high_school" name="high_school" class="form-control" placeholder="e.g., Alliance High" required>
+            <small class="form-text text-muted">Enter your high school name.</small>
+        </div>
+
+        <div class="mb-4">
+            <label for="kcse_grade" class="form-label">KCSE Grade</label>
+            <input type="text" id="kcse_grade" name="kcse_grade" class="form-control" placeholder="e.g., A-" required>
+            <small class="form-text text-muted">Enter your KCSE grade.</small>
+        </div>
+
+        <div class="mb-4">
+            <label for="subjects_taken" class="form-label">Subjects Taken</label>
+            <input type="text" id="subjects_taken" name="subjects_taken" class="form-control" placeholder="e.g., Math, Physics" required>
+            <small class="form-text text-muted">List the subjects you took in high school.</small>
+        </div>
+
+        <div class="mb-4">
+            <label for="strengths" class="form-label">Strengths in Subjects</label>
+            <input type="text" id="strengths" name="strengths" class="form-control" placeholder="e.g., Math, Physics" required>
+            <small class="form-text text-muted">Mention your strengths in subjects.</small>
+        </div>
+
+        <div class="mb-4">
+            <label for="extracurricular" class="form-label">Extracurricular Activities</label>
+            <input type="text" id="extracurricular" name="extracurricular" class="form-control" placeholder="e.g., Football, Debate" required>
+            <small class="form-text text-muted">List any extracurricular activities.</small>
+        </div>
+
+        <div class="mb-4">
+            <label for="hobbies" class="form-label">Hobbies/Interests</label>
+            <textarea id="hobbies" name="hobbies" class="form-control" rows="3" placeholder="e.g., Coding, Reading"></textarea>
+            <small class="form-text text-muted">Include your hobbies and interests.</small>
+        </div>
+
+        <div class="mb-4">
+            <label for="volunteer_work" class="form-label">Volunteer/Community Work</label>
+            <textarea id="volunteer_work" name="volunteer_work" class="form-control" rows="3" placeholder="e.g., Cleanup Initiatives"></textarea>
+            <small class="form-text text-muted">List any volunteer or community work.</small>
+        </div>
+
+        <div class="mb-4">
+            <label for="career_aspirations" class="form-label">Career Aspirations</label>
+            <input type="text" id="career_aspirations" name="career_aspirations" class="form-control" placeholder="e.g., Engineer" required>
+            <small class="form-text text-muted">What are your career aspirations?</small>
+        </div>
+
+        <div class="mb-4">
+            <label for="guardian_occupation" class="form-label">Parent/Guardian's Occupation</label>
+            <input type="text" id="guardian_occupation" name="guardian_occupation" class="form-control" placeholder="e.g., Teacher" required>
+            <small class="form-text text-muted">Enter your parent or guardian's occupation.</small>
+        </div>
+
+        <div class="mb-4">
+            <label for="personality_type" class="form-label">Personality Type (MBTI)</label>
+            <input type="text" id="personality_type" name="personality_type" class="form-control" placeholder="e.g., INTJ">
+            <small class="form-text text-muted">Optional: Enter your MBTI personality type.</small>
+        </div>
+
+        <div class="mb-4">
+            <label for="performance_stem" class="form-label">Performance in STEM Subjects</label>
+            <input type="text" id="performance_stem" name="performance_stem" class="form-control" placeholder="e.g., High, Medium, Low" required>
+            <small class="form-text text-muted">Rate your performance in STEM subjects.</small>
+        </div>
+
+        <div class="mb-4">
+            <label for="performance_arts" class="form-label">Performance in Arts/Humanities</label>
+            <input type="text" id="performance_arts" name="performance_arts" class="form-control" placeholder="e.g., High, Medium, Low" required>
+            <small class="form-text text-muted">Rate your performance in Arts/Humanities.</small>
+        </div>
+
+        <div class="mb-4">
+            <label for="preferred_study_mode" class="form-label">Preferred Study Mode</label>
+            <input type="text" id="preferred_study_mode" name="preferred_study_mode" class="form-control" placeholder="e.g., Practical, Theoretical, Both" required>
+            <small class="form-text text-muted">What is your preferred study mode?</small>
+        </div>
+
+        <div class="mb-4">
+            <label for="learning_disabilities" class="form-label">Any Learning Disabilities?</label>
+            <input type="text" id="learning_disabilities" name="learning_disabilities" class="form-control" placeholder="e.g., Yes or No" required>
+            <small class="form-text text-muted">Do you have any learning disabilities?</small>
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary btn-lg me-2">Get Recommendations</button>
+            <button type="reset" class="btn btn-secondary btn-lg me-2">Clear</button>
+            <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary btn-lg">Back</a>
+        </div>
+    </form>
+
+    <h2 class="text-center mb-4 mt-5">Career Recommendations</h2>
+
+    {% if recommendations %}
+        <div class="alert alert-success" role="alert">
+            <h4 class="alert-heading">Here are your personalized recommendations!</h4>
+            <ul class="list-group">
+                {% for recommendation in recommendations %}
+                    <li class="list-group-item">{{ recommendation }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% else %}
+        <div class="alert alert-warning" role="alert">
+            <h4 class="alert-heading">No recommendations available.</h4>
+            <p>Please ensure you have filled out the assessment form correctly.</p>
+        </div>
+    {% endif %}
+
+    <div class="text-center mt-4">
+        <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary btn-lg">Go to Dashboard</a>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+<form method="POST" action="{% url 'recommendations' %}">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label for="education" class="form-label">Educational Background</label>
+        <input type="text" id="education" name="education" class="form-control" placeholder="e.g., High School, Bachelor's Degree">
+    </div>
+    <div class="mb-3">
+        <label for="activities" class="form-label">Extracurricular Activities</label>
+        <input type="text" id="activities" name="activities" class="form-control" placeholder="e.g., Sports, Clubs, Volunteering">
+    </div>
+    <div class="mb-3">
+        <label for="skills" class="form-label">Skills and Interests</label>
+        <input type="text" id="skills" name="skills" class="form-control" placeholder="e.g., Coding, Art, Sports">
+    </div>
+    <button type="submit" class="btn btn-primary">Get Recommendations</button>
+</form>
